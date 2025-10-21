@@ -1,0 +1,599 @@
+% Make sure xcolor gets options before any package loads it:
+\PassOptionsToPackage{dvipsnames}{xcolor}
+
+\documentclass{article}
+
+% ---------- Page geometry ----------
+\usepackage{geometry}
+\geometry{left=1.2in, right=1.2in, top=1.2in, bottom=1.2in}
+
+% ---------- Encoding & language ----------
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+
+% ---------- Math & theorem tools ----------
+\usepackage{mathtools}  % loads amsmath
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{stmaryrd}   % \llbracket \rrbracket
+\usepackage{mathrsfs}   % \mathscr
+\usepackage{dsfont}     % \mathds{1}
+
+% ---------- Graphics / diagrams ----------
+\usepackage{tikz}
+\usetikzlibrary{cd}
+\usetikzlibrary{shapes.geometric,arrows,positioning,fit,calc}
+\usepackage[all]{xy}
+
+% ---------- Lists, floats, tables, layout helpers ----------
+\usepackage[shortlabels]{enumitem}
+\usepackage{float}
+\usepackage{multirow}
+\usepackage{adjustbox}
+
+% ---------- Colors (already has dvipsnames via PassOptionsToPackage) ----------
+\usepackage{xcolor}
+
+% ---------- Bibliography (BibLaTeX) ----------
+\usepackage{csquotes}
+\usepackage{biblatex}
+\addbibresource{references.bib}
+
+% ---------- Titles / TOC helpers ----------
+\usepackage{titlesec}
+
+\newcommand{\chapterheading}[1]{%
+  \section*{#1}%
+  \addcontentsline{toc}{section}{#1}%
+}
+\newcommand{\topic}[1]{%
+  \phantomsection
+  \subsection*{#1}%
+  \addcontentsline{toc}{subsection}{#1}%
+}
+\newcommand{\subtopic}[1]{%
+  \phantomsection
+  \subsubsection*{#1}%
+  \addcontentsline{toc}{subsubsection}{#1}%
+}
+
+% Custom theorem styles for “displayed statements”
+\newtheoremstyle{customplain}{1em}{1em}{\itshape}{}{\bfseries}{.}{ }{}
+\newtheoremstyle{customdef}{1em}{1em}{}{}{\bfseries}{.}{ }{}
+
+\theoremstyle{customplain}
+\newtheorem*{customthm}{Statement}
+\newtheorem*{customlem}{Statement}
+\newtheorem*{customprop}{Statement}
+\newtheorem*{customcor}{Statement}
+
+\theoremstyle{customdef}
+\newtheorem*{customdefn}{Statement}
+\newtheorem*{customex}{Statement}
+\newtheorem*{customexer}{Statement}
+\newtheorem*{customremark}{Statement}
+
+\newcommand{\tocexercise}[2]{%
+  \phantomsection
+  \subsubsection*{#1}%
+  \addcontentsline{toc}{subsubsection}{\texorpdfstring{#1}{Exercise}}%
+  \begin{customexer}#2\end{customexer}
+}
+\newcommand{\toctheorem}[2]{%
+  \phantomsection
+  \subsubsection*{#1}%
+  \addcontentsline{toc}{subsubsection}{\texorpdfstring{#1}{Theorem}}%
+  \begin{customthm}#2\end{customthm}
+}
+\newcommand{\toclemma}[2]{%
+  \phantomsection
+  \subsubsection*{#1}%
+  \addcontentsline{toc}{subsubsection}{\texorpdfstring{#1}{Lemma}}%
+  \begin{customlem}#2\end{customlem}
+}
+\newcommand{\tocproposition}[2]{%
+  \phantomsection
+  \subsubsection*{#1}%
+  \addcontentsline{toc}{subsubsection}{\texorpdfstring{#1}{Proposition}}%
+  \begin{customprop}#2\end{customprop}
+}
+\newcommand{\tocexample}[2]{%
+  \phantomsection
+  \subsubsection*{#1}%
+  \addcontentsline{toc}{subsubsection}{\texorpdfstring{#1}{Example}}%
+  \begin{customex}#2\end{customex}
+}
+
+% ---------- Standard theorem environments ----------
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}{Corollary}[theorem]
+\newtheorem*{remark}{Remark}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem*{theorem*}{Theorem}
+\newtheorem*{corollary*}{Corollary}
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+% ---------- Hyperlinks (after most packages; before todonotes) ----------
+\usepackage[colorlinks=true, linkcolor=blue, citecolor=blue, urlcolor=blue]{hyperref}
+
+% ---------- Optional TODO notes (after hyperref) ----------
+\usepackage{xargs}
+\usepackage[colorinlistoftodos,prependcaption,textsize=tiny]{todonotes}
+\newcommandx{\unsure}[2][1=]{\todo[linecolor=red,backgroundcolor=red!25,bordercolor=red,#1]{#2}}
+\newcommandx{\change}[2][1=]{\todo[linecolor=blue,backgroundcolor=blue!25,bordercolor=blue,#1]{#2}}
+\newcommandx{\info}[2][1=]{\todo[linecolor=OliveGreen,backgroundcolor=OliveGreen!25,bordercolor=OliveGreen,#1]{#2}}
+\newcommandx{\improvement}[2][1=]{\todo[linecolor=Plum,backgroundcolor=Plum!25,bordercolor=Plum,#1]{#2}}
+\newcommandx{\thiswillnotshow}[2][1=]{\todo[disable,#1]{#2}}
+
+% ---------- Small typography tweaks ----------
+\renewcommand{\le}{\leqslant}
+\renewcommand{\ge}{\geqslant}
+
+% ---------- Handy delimiters ----------
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\norm}[1]{\left\| #1 \right\|}
+\newcommand{\llp}{\mathopen{(\!(}}
+\newcommand{\rrp}{\mathclose{)\!)}}
+\newcommand{\llb}{\llbracket}
+\newcommand{\rrb}{\rrbracket}
+
+% ---------- Blackboard/calligraphic/script ----------
+\newcommand{\A}{\mathbb{A}}
+\newcommand{\B}{\mathbb{B}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\D}{\mathbb{D}}
+\newcommand{\F}{\mathbb{F}}
+% --- redefine \H safely ---
+\makeatletter
+% --- keep the original Ø and Hungarian accent ---
+\AtBeginDocument{%
+  \let\Otext\O     
+  \let\Haccent\H   
+
+  % make \O and \H math-safe everywhere
+  \DeclareRobustCommand{\O}{\ensuremath{\mathrm{O}}}
+  \DeclareRobustCommand{\H}{\ensuremath{\mathbb{H}}}
+}
+\makeatother
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\RP}{\mathbb{RP}}
+\newcommand{\CP}{\mathbb{CP}}
+\newcommand{\HP}{\mathbb{HP}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Z}{\mathbb{Z}}
+\let\Section\S
+\renewcommand{\S}{\mathbb{S}}
+\let\Paragraph\P
+\renewcommand{\P}{\mathbb{P}}
+
+\newcommand{\calA}{\mathcal{A}}
+\newcommand{\calB}{\mathcal{B}}
+\newcommand{\calC}{\mathcal{C}}
+\newcommand{\calE}{\mathcal{E}}
+\newcommand{\calH}{\mathcal{H}}
+\newcommand{\calK}{\mathcal{K}}
+\newcommand{\calL}{\mathcal{L}}
+\newcommand{\calM}{\mathcal{M}}
+\newcommand{\calO}{\mathcal{O}}
+\newcommand{\calP}{\mathcal{P}}
+\newcommand{\calQ}{\mathcal{Q}}
+\newcommand{\calR}{\mathcal{R}}
+
+\newcommand{\fA}{\mathscr{A}}
+\newcommand{\fB}{\mathscr{B}}
+\newcommand{\fC}{\mathscr{C}}
+\newcommand{\fD}{\mathscr{D}}
+\newcommand{\fE}{\mathscr{E}}
+\newcommand{\fF}{\mathscr{F}}
+\newcommand{\fG}{\mathscr{G}}
+\newcommand{\fH}{\mathscr{H}}
+\newcommand{\fI}{\mathscr{I}}
+\newcommand{\fJ}{\scri{J}}
+\newcommand{\fO}{\mathscr{O}}
+\newcommand{\fS}{\mathscr{S}}
+\newcommand{\fT}{\mathscr{T}}
+
+% ---------- Fraktur ----------
+\newcommand{\frkA}{\mathfrak{A}}
+\newcommand{\frkB}{\mathfrak{B}}
+\newcommand{\frkS}{\mathfrak{S}}
+\newcommand{\frka}{\mathfrak{a}}
+\newcommand{\frkb}{\mathfrak{b}}
+\newcommand{\frkc}{\mathfrak{c}}
+\newcommand{\frkm}{\mathfrak{m}}
+\newcommand{\frkn}{\mathfrak{n}}
+\newcommand{\frkp}{\mathfrak{p}}
+\newcommand{\frkq}{\mathfrak{q}}
+\newcommand{\frkl}{\mathfrak{l}}
+\newcommand{\frkN}{\mathfrak{N}}
+\newcommand{\frkgl}{\mathfrak{gl}}
+\newcommand{\frksl}{\mathfrak{sl}}
+\newcommand{\frkso}{\mathfrak{so}}
+\newcommand{\frksp}{\mathfrak{sp}}
+\newcommand{\frku}{\mathfrak{u}}
+\newcommand{\frkg}{\mathfrak{g}}
+\newcommand{\frkh}{\mathfrak{h}}
+
+% ---------- Misc symbols ----------
+\newcommand{\rddots}{\reflectbox{$\ddots$}}
+\newcommand{\altid}{\mathds{1}}
+\newcommand{\eps}{\varepsilon}
+\newcommand\interior[1]{{#1}^{\circ}}
+\newcommand{\ctd}{\Rightarrow \Leftarrow}
+\newcommand{\actson}{\circlearrowright}
+\providecommand\mapsfrom{\mathrel{\reflectbox{\ensuremath{\mapsto}}}} % (fix)
+
+\newcommand{\sqdot}{\, \raisebox{0.5ex}{\scalebox{0.2}{$\blacksquare$}} \,}
+\newcommand{\nsubset}{\not\subset}
+\let\oldemptyset\emptyset
+\let\emptyset\varnothing
+
+% ---------- Number theory brackets ----------
+\newcommand{\leg}[2]{\genfrac{(}{)}{}{}{#1}{#2}}
+\newcommand{\jac}[2]{\genfrac{(}{)}{}{}{#1}{#2}}
+\newcommand{\kron}[2]{\genfrac{(}{)}{}{}{#1}{#2}}
+
+% ---------- Operators ----------
+\DeclareMathOperator{\Ab}{\mathbf{Ab}}
+\DeclareMathOperator{\Grp}{\mathbf{Grp}}
+\DeclareMathOperator{\Ring}{\mathbf{Ring}}
+\DeclareMathOperator{\CRing}{\mathbf{CRing}}
+\DeclareMathOperator{\Rng}{\mathbf{Rng}}
+\DeclareMathOperator{\Set}{\mathbf{Set}}
+\DeclareMathOperator{\pSet}{\mathbf{Set}_{\bullet}}
+\DeclareMathOperator{\Top}{\mathbf{Top}}
+\DeclareMathOperator{\pTop}{\mathbf{Top}_{\bullet}}
+\DeclareMathOperator{\Op}{\mathbf{Op}}
+\DeclareMathOperator{\Vect}{\mathbf{Vect}}
+\DeclareMathOperator{\Man}{\mathbf{Man}}
+\DeclareMathOperator{\Mod}{\mathbf{Mod}}
+\DeclareMathOperator{\Mon}{\mathbf{Mon}}
+\DeclareMathOperator{\Cat}{\mathbf{Cat}}
+\DeclareMathOperator{\Ssubset}{\mathbf{Subset}}
+\DeclareMathOperator{\Com}{\mathbf{Com}}
+\DeclareMathOperator{\Haus}{\mathbf{Haus}}
+\DeclareMathOperator{\Comp}{\mathbf{Comp}}
+\DeclareMathOperator{\Poset}{\mathbf{Poset}}
+\DeclareMathOperator{\Graph}{\mathbf{Graph}}
+\DeclareMathOperator{\Sch}{\mathbf{Sch}}
+\DeclareMathOperator{\AffSch}{\mathbf{AffSch}}
+\DeclareMathOperator{\Grph}{\mathbf{Grph}}
+\DeclareMathOperator{\Rel}{\mathbf{Rel}}
+\DeclareMathOperator{\CW}{\mathbf{CW}}
+\DeclareMathOperator{\PreSh}{\mathbf{PreSh}}
+\DeclareMathOperator{\Sh}{\mathbf{Sh}}
+\DeclareMathOperator{\catD}{\mathbf{D}}
+\DeclareMathOperator{\TopGrp}{\mathbf{TopGrp}}
+\DeclareMathOperator{\Meas}{\mathbf{Meas}}
+\DeclareMathOperator{\Cob}{\mathbf{Cob}}
+\DeclareMathOperator{\LieAlg}{\mathbf{LieAlg}}
+\DeclareMathOperator{\Ban}{\mathbf{Ban}}
+\DeclareMathOperator{\Hilb}{\mathbf{Hilb}}
+\DeclareMathOperator{\AlgC}{\mathbf{Alg_C}}
+\DeclareMathOperator{\Rep}{\mathbf{Rep}}
+
+\DeclareMathOperator{\res}{\mathrm{res}}
+\DeclareMathOperator{\pre}{\mathrm{pre}}
+\DeclareMathOperator{\ad}{\mathrm{ad}}
+\DeclareMathOperator{\ord}{\mathrm{ord}}
+\DeclareMathOperator{\diam}{\mathrm{diam}}
+\DeclareMathOperator{\dist}{\mathrm{dist}}
+\DeclareMathOperator{\meas}{\mathrm{meas}}
+\DeclareMathOperator{\Vol}{\mathrm{Vol}}
+\DeclareMathOperator{\Ind}{\mathrm{Ind}}
+\DeclareMathOperator{\Res}{\mathrm{Res}}
+\DeclareMathOperator{\End}{\mathrm{End}}
+\DeclareMathOperator{\PGL}{\mathrm{PGL}}
+\DeclareMathOperator{\Aff}{\mathrm{Aff}}
+\DeclareMathOperator{\GL}{\mathrm{GL}}
+\DeclareMathOperator{\SL}{\mathrm{SL}}
+\DeclareMathOperator{\PSL}{\mathrm{PSL}}
+\DeclareMathOperator{\U}{\mathrm{U}}
+\DeclareMathOperator{\SO}{\mathrm{SO}}
+\DeclareMathOperator{\SU}{\mathrm{SU}}
+\DeclareMathOperator{\Sp}{\mathrm{Sp}}
+\DeclareMathOperator{\Gal}{\mathrm{Gal}}
+\DeclareMathOperator{\Stab}{\mathrm{Stab}}
+\DeclareMathOperator{\Proj}{\mathrm{Proj}}
+\DeclareMathOperator{\Div}{\mathrm{Div}}
+\DeclareMathOperator{\Pic}{\mathrm{Pic}}
+\DeclareMathOperator{\im}{\mathrm{im}}
+\DeclareMathOperator{\coim}{\mathrm{coim}}
+\DeclareMathOperator{\cok}{\mathrm{cok}}
+\DeclareMathOperator{\colim}{\mathrm{colim}}
+\DeclareMathOperator{\spn}{\mathrm{span}}
+\DeclareMathOperator{\Sym}{\mathrm{Sym}}
+\DeclareMathOperator{\Hom}{\mathrm{Hom}}
+\DeclareMathOperator{\Mor}{\mathrm{Mor}}
+\DeclareMathOperator{\Nat}{\mathrm{Nat}}
+\DeclareMathOperator{\Tr}{\mathrm{Tr}}
+\DeclareMathOperator{\trdeg}{\mathrm{tr.deg}}
+\DeclareMathOperator{\Bd}{\mathrm{Bd}}
+\DeclareMathOperator{\Ann}{\mathrm{Ann}}
+\DeclareMathOperator{\Int}{\mathrm{Int}}
+\DeclareMathOperator{\Homeo}{\mathrm{Homeo}}
+\DeclareMathOperator{\Char}{\mathrm{char}}
+\DeclareMathOperator{\nullity}{\mathrm{nullity}}
+\DeclareMathOperator{\Aut}{\mathrm{Aut}}
+\DeclareMathOperator{\Frac}{\mathrm{Frac}}
+\DeclareMathOperator{\supp}{\mathrm{supp}}
+\DeclareMathOperator{\rank}{\mathrm{rank}}
+\DeclareMathOperator{\diag}{\mathrm{diag}}
+\DeclareMathOperator{\sign}{\mathrm{sign}}
+\DeclareMathOperator{\glue}{\mathrm{glue}}
+\DeclareMathOperator{\kerpre}{\ker_{\text{pre}}}
+\DeclareMathOperator{\cokpre}{\cok_{\text{pre}}}
+\DeclareMathOperator{\impre}{\im_{\text{pre}}}
+\DeclareMathOperator{\coimpre}{\coim_{\text{pre}}}
+\DeclareMathOperator{\sh}{\mathrm{sh}}
+\DeclareMathOperator{\ev}{\mathrm{ev}}
+\DeclareMathOperator{\Spec}{\mathrm{Spec}}
+\DeclareMathOperator{\Ext}{\mathrm{Ext}}
+\DeclareMathOperator{\Tor}{\mathrm{Tor}}
+\DeclareMathOperator{\lcm}{\mathrm{lcm}}
+\DeclareMathOperator{\Nm}{\mathrm{Nm}}
+
+% ---------- Extra arrows ----------
+\makeatletter
+\newcommand\xtwoheadrightarrow[2][]{%
+  \ext@arrow 0579{\twoheadrightarrowfill@}{#1}{#2}}
+\newcommand\twoheadrightarrowfill@{%
+  \arrowfill@\relbar\relbar\twoheadrightarrow}
+\makeatother
+
+% ================================
+% Standard arithmetic-geometry / Langlands macros
+% ================================
+
+% --- Global/local fields and completions ---
+\newcommand{\Qbar}{\overline{\Q}}              % algebraic closure of Q
+\newcommand{\Qp}{\Q_p}
+\newcommand{\Qpbar}{\overline{\Q}_p}
+\newcommand{\Cp}{\C_p}
+\newcommand{\Zp}{\Z_p}
+\newcommand{\Zhat}{\widehat{\Z}}
+\newcommand{\Fp}{\F_p}
+\newcommand{\Fq}{\F_q}
+\newcommand{\Fbar}{\overline{\F}}
+\newcommand{\Af}{\A_{\mathrm f}}               % finite adèles
+\newcommand{\Aone}{\A^{1}}
+\newcommand{\SpecZ}{\Spec \Z}
+\newcommand{\SpecQ}{\Spec \Q}
+
+% --- Rings of integers, valuations ---
+\newcommand{\OO}{\mathcal{O}}
+\newcommand{\OK}{\OO_K}
+\newcommand{\OL}{\OO_L}
+\newcommand{\mK}{\frkm_K}
+\newcommand{\vp}{v_p}
+\newcommand{\ordp}{\operatorname{ord}_p}
+\newcommand{\ordv}{\operatorname{ord}_v}
+
+% --- Galois groups & Frobenius ---
+\newcommand{\GQ}{G_{\Q}}
+\newcommand{\GQp}{G_{\Q_p}}
+\newcommand{\GK}{G_{K}}
+\newcommand{\GLQp}{\GL_2(\Qp)}
+\newcommand{\Frob}{\mathrm{Frob}}
+\newcommand{\Frobp}{\Frob_p}
+\newcommand{\Frobv}{\Frob_v}
+\newcommand{\Art}{\mathrm{Art}}                % Artin map
+
+% --- Cohomology theories ---
+\newcommand{\et}{\mathrm{\acute{e}t}}
+\newcommand{\fppf}{\mathrm{fppf}}
+\newcommand{\cris}{\mathrm{cris}}
+\newcommand{\dR}{\mathrm{dR}}
+\newcommand{\Het}{H_{\et}}
+\newcommand{\Hc}{H_{\mathrm c}}
+\newcommand{\RGamma}{\mathbf{R}\Gamma}
+\newcommand{\Rfstar}{\mathbf{R}f_*}
+\newcommand{\Lfstar}{\mathbf{L}f^*}
+
+% --- p-adic Hodge theory ---
+\newcommand{\Ainf}{A_{\mathrm{inf}}}
+\newcommand{\BdR}{B_{\mathrm{dR}}}
+\newcommand{\Bcris}{B_{\mathrm{cris}}}
+\newcommand{\BHT}{B_{\mathrm{HT}}}
+
+% --- Perfectoid/adic geometry ---
+\newcommand{\Spa}{\operatorname{Spa}}
+\newcommand{\Spf}{\operatorname{Spf}}
+\newcommand{\Spm}{\operatorname{Spm}}
+\newcommand{\tilt}{^{\flat}}                   % X^\flat
+
+% --- Group schemes / stacks ---
+\newcommand{\Gm}{\mathbb{G}_m}
+\newcommand{\Ga}{\mathbb{G}_a}
+\newcommand{\muN}[1]{\mu_{#1}}
+\newcommand{\Bun}{\operatorname{Bun}}
+
+% --- Elliptic curves & Diophantine notation ---
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\Sel}{\mathrm{Sel}}
+
+% Proper Tate–Shafarevich symbol (Cyrillic Ш)
+\usepackage[T2A]{fontenc}
+\newcommand{\Sha}{\text{\fontencoding{T2A}\selectfont\CYRSH}}
+
+\newcommand{\heightN}{\hat{h}}                 % Néron–Tate height
+\newcommand{\Tate}{\mathrm{Tate}}
+
+% --- Modular forms, Hecke operators ---
+\newcommand{\Mk}[1]{M_{#1}}
+\newcommand{\Sk}[1]{S_{#1}}
+\newcommand{\Tp}{T_p}
+\newcommand{\Up}{U_p}
+\newcommand{\GammaN}[1]{\Gamma_0(#1)}
+
+% --- Norms, traces, pairings ---
+\newcommand{\Nmk}[2]{\mathrm{Nm}_{#1/#2}}
+\newcommand{\Trmk}[2]{\mathrm{Tr}_{#1/#2}}
+\newcommand{\pair}[2]{\langle #1,\,#2\rangle}
+
+% --- Category-theoretic & derived conventions ---
+\newcommand{\Perf}{\operatorname{Perf}}
+\newcommand{\QCoh}{\operatorname{QCoh}}
+\newcommand{\Coh}{\operatorname{Coh}}
+\newcommand{\Dperf}{\catD_{\mathrm{perf}}}
+\newcommand{\Dqc}{\catD_{\mathrm{qc}}}
+\newcommand{\Dcoh}{\catD_{\mathrm{coh}}}
+\newcommand{\Vectf}{\Vect_{\mathrm f}}
+
+% --- Arrow conveniences ---
+\newcommand{\into}{\hookrightarrow}
+\newcommand{\onto}{\twoheadrightarrow}
+\newcommand{\isom}{\xrightarrow{\sim}}
+\newcommand{\defeq}{\vcentcolon=}
+\newcommand{\eqdef}{=\vcentcolon}
+\newcommand{\tensorhat}{\widehat{\otimes}}
+
+% --- Title Block ---
+\makeatletter
+\newcommand{\Course}[1]{\gdef\@Course{#1}}
+\newcommand{\Instructor}[1]{\gdef\@Instructor{#1}}
+\newcommand{\Collaborators}[1]{\gdef\@Collaborators{#1}}
+\newcommand{\Student}[1]{\gdef\@Student{#1}}
+
+% defaults so empties are safe
+\gdef\@Course{}
+\gdef\@Instructor{}
+\gdef\@Collaborators{}
+\gdef\@Student{Jack Westbrook}
+
+% --- Custom maketitle ---
+\renewcommand{\maketitle}{%
+  \begin{center}
+    {\Large\bfseries \@title\par}
+    \vspace{0.5em}
+    \ifx\@Course\@empty\else {\normalsize\textit{\@Course}\par}\fi
+    \vspace{0.5em}
+    {\normalsize \@Student\par}
+    \ifx\@Instructor\@empty\else   {\small Instructor: \@Instructor\par}\fi
+    \ifx\@Collaborators\@empty\else{\small Collaborators: \@Collaborators\par}\fi
+    \vspace{0.5em}
+    {\small \today}
+  \end{center}
+  \vspace{1em}%
+}
+\makeatother
+
+% ---------- Title ----------
+\title{A Proof of Quadratic Reciprocity by Galois Theory}
+\Instructor{Prof. Ana Caraiani}
+%\Collaborators{Alice Smith, Bob Johnson} % omit if none
+% \Student{Jack Westbrook} % only if overriding the default
+
+\begin{document}
+\maketitle
+\section*{}
+Let $p,q$ be distinct, odd rational primes. Then
+\[
+\leg{q}{p}=(-1)^{\frac{p-1}{2} \frac{q-1}{2}} \leg{p}{q}.
+\]
+In addition,
+\[
+\leg{2}{p} = \begin{cases}
+    1, & \text{ if } p \equiv \pm 1 \mod 8\\
+    -1, & \text{ if } p \equiv \pm 3 \mod 8
+\end{cases}
+\]
+and
+\[
+\leg{-1}{p}=(-1)^{\frac{p-1}{2}}.
+\]
+
+\begin{proof}
+We let $\zeta_p$ denote a primitive $p$-th root of unity over $\Q$. We assume these basic results from algebraic number theory: $\Gal(\Q(\zeta_p)/\Q) \cong (\Z/p\Z)^\times$, and if $d$ is a squarefree integer then $\calO_{\Q(\sqrt{d})}=\Z[\alpha]$ where $\alpha = \begin{cases}
+    \sqrt{d}, &\text{ if } d\equiv 2,3\mod 4\\
+    \frac{1+\sqrt{d}}{2}, & \text{ if } d\equiv 1 \mod 4
+\end{cases}$ and $\Delta(\Q(\sqrt{d}))=\begin{cases}
+    d, & \text{ if } d \equiv 1 \mod 4\\
+    4d, & \text{ if } d \equiv 2,3, \mod 4
+\end{cases}$.
+
+\begin{lemma}\label{lem:2 homs}
+    For any group $G,$ $$\# \Hom(G, \Z/2\Z)=\#\{H\leq G \mid [G:H]=2\}+1.$$
+\end{lemma}
+\begin{proof}
+    If $\phi:G\to \Z/2\Z$ is a nontrivial group homomorphism, then $\ker \phi$ is an index 2 subgroup of $G$. Moreover, if $\psi$ is another such homomorphism, then there is a homomorphism $\phi+\psi$ given by $(\phi+\psi)(x)=\phi(x)+\psi(x).$ Now if $\ker \phi = \ker \psi$, then $\phi+\psi=0$. To see this, divide into cases based on whether or not an arbitrary $x\in G$ is in $\ker \phi.$ As a consequence, $\phi+\phi=0$. 
+    Then
+    \[
+    \phi  = (\phi+\psi)+\phi = (\phi+\phi)+\psi=\psi.
+    \]
+    Therefore the set of nonzero homomorphisms injects into the set of index 2 subgroups. In addition, since every index 2 subgroup is normal, every index 2 subgroup is the kernel of a homomorphism $G\to \Z/2\Z.$ Thus the set of nonzero homomorphisms is in bijection with the set of index 2 subgroups, giving the result.
+\end{proof}
+
+\begin{lemma}\label{lem:quad subfield}
+    The unique quadratic subfield of $\Q(\zeta_p)$ is $\Q(\sqrt{\hat{p}})$ where $\hat{p}\defeq (-1)^{\frac{p-1}{2}} p.$
+\end{lemma}
+\begin{proof}
+We see that $\Q(\zeta_p)$ has a unique quadratic subfield $\Q(\sqrt{d})$ (for some $d\in \Z$ squarefree) because there is a unique subgroup of order 2 in $\Gal(\Q(\zeta_p)/\Q).$ More is true; because $p$ is the only prime that ramifies in $\Q(\zeta_p)$ by Proposition 6.2 in \cite{milneANT}, it follows that $p$ is the only prime that ramifies in $\Q(\sqrt d)$ as well, so the discriminant must be a power of $p$ (positive or negative). However, the discriminant of $\Q(\sqrt{d})$ is $d$ if $d\equiv 1 \mod 4$ and is $4d$ otherwise. From this it follows that $d\equiv 1 \mod 4$ and that $d=\pm p.$ In particular, the quadratic subfield of $\Q(\zeta_p)$ is
+\[
+\begin{cases}
+    \Q(\sqrt{p}), & \text{ if } p\equiv 1 \mod 4\\
+    \Q(\sqrt{-p}), & \text{ if } p \equiv 3 \mod 4
+\end{cases}
+= \Q(\hat p).
+\]
+\end{proof}
+
+First, we prove the easy result that $\leg{-1}{p}=(-1)^{\frac{p-1}{2}}.$ One way to do this is by considering the field $\F_p$, and an algebraically closed field $\Omega$ containing $\F_p.$ We notice that
+\[
+\F_p = \{x\in \Omega \mid x^p = x\}
+\]
+since the containment $\subset$ is clear, and both are sets of size $p$, so they must be equal. From this we deduce
+\[
+\F_p^\times=\{x\in \Omega \mid x^{p-1}=1\}.
+\]
+Now let $x\in \F_p^\times$ be arbitrary, and $y\in \Omega$ such that $y^2=x.$ We see that $\leg{x}{p}=1$ iff $y\in \F_p$ iff $y^{p-1}=1.$ Since $y^{p-1}=x^{\frac{p-1}{2}}\in \{\pm 1\}$, we get the exact sequence of groups
+\[
+1\to (\F_p^\times)^2 \to \F_p^\times \xrightarrow{x\mapsto x^{\frac{p-1}{2}}} \{\pm 1\} \to 1.
+\]
+Thus we deduce more generally that for any $x\in \F_p^\times$, $\leg{x}{p}= x^{\frac{p-1}{2}}$ (identifying $\{\pm 1\}$ with the copy embedded in $\F_p$).
+
+Now to the problem of reciprocity. From Lemma~\ref{lem:quad subfield}, we have a nontrivial map $\res:\Gal(\Q(\zeta_p)/\Q)\to \Gal(\Q(\sqrt{\hat{p}})/\Q)$ (nontrivial since $\Q(\zeta_p)$ is not a quadratic extension), a map $\leg{\cdot}{p}:(\Z/p\Z)^\times \to \{\pm 1\}$, and isomorphisms $\Gal(\Q(\zeta_p)/\Q)\isom (\Z/p\Z)^\times$, $\Gal(\Q(\sqrt{\hat{p}})/\Q)\isom \{\pm 1\}.$ Because each composite is nontrivial, Lemma~\ref{lem:2 homs}, combined with the fact that for every cyclic group of order $n$ and $d\mid n$ has a unique subgroup of order $d$, gives that the below diagram of groups commutes:
+\begin{center}
+    \begin{tikzcd}
+        \Gal(\Q(\zeta_p)/\Q) \ar{d}{\sim} \ar[two heads]{r}{\res} & \Gal(\Q(\sqrt{\hat p})/\Q) \ar{d}{\sim}\\
+        (\Z/p\Z)^\times \ar[two heads]{r}{\leg{\cdot}{p}} & \{\pm 1\}.
+    \end{tikzcd}
+\end{center}
+There exists a unique ($\Frob$ always exists uniquely up to conjugacy, but since $\Q(\zeta_p)/\Q$ is abelian conjugacy classes are the same as elements) element $\Frob_q\in \Gal(\Q(\zeta_p)/\Q)$ such that for a (equivalently, any, since $\Q(\zeta_p)$ is abelian) $\Q(\zeta_p)$-prime $\frkq$ lying over $q$, $\Frob_q$ acts as $x\mapsto x^q $ on $\calO_{\Q(\zeta_p)}/\frkq $. In particular, since $\calO_{\Q(\zeta_p)}=\Z[\zeta_p]$ by Proposition 6.2 in \cite{milneANT}, and there exists an automorphism defined by $\zeta_p\mapsto \zeta_p^q$ in $\Gal(\Q(\zeta_p)/\Q)$ which visibly acts as $x\mapsto x^q$ on $\Z[\zeta_p]/\frkq$ for any prime $\frkq \mid q$, we see that $\Frob_q$ is the automorphism given by $\zeta_p\mapsto \zeta_p^q.$ The result will follow by tracking $\Frob_q$ around both sides of the diagram.
+
+For the top side, since $q$ is unramified in $\Q(\sqrt{\hat{p}})$, it follows that either $q$ splits or is inert. Let $\frkq$ be a $\Q(\sqrt{\hat p})$-prime lying over $q.$ If $q$ splits, it follows (from $\sum_{\frkB \mid \frkp} e_\frkB f_\frkB = [L:K]$, i.e., Theorem 3.34 in \cite{milneANT}) that $\calO_{\Q(\sqrt{\hat{p}})}/\frkq \cong \F_q$, in which case $\res (\Frob_q) $ is indeed trivial on the residue field, hence trivial by uniqueness of $\Frob_q$ in $\Gal(\Q(\sqrt{\hat p})/\Q).$ On the other hand, if $q$ is inert, then $\calO_{\Q(\sqrt{\hat{p}})}/\frkq \cong \F_{q^2}$, in which case $x\mapsto x^q$ is nontrivial, so $\res(\Frob_q)$ is the nontrivial element of $\Gal(\Q(\sqrt{\hat p})/\Q).$
+
+From Theorem 3.41 in \cite{milneANT}, $q$ splits if and only if $x^2-x+\frac{1-\hat p}{4}$ (the minimal polynomial of $\frac{1+\sqrt{\hat p}}{2}$, where $\calO_{\Q(\sqrt{\hat p})}=\Z[\frac{1+\sqrt{\hat p}}{2}]$) has a root modulo $q$. Because this polynomial has discriminant $\hat p$, this is if and only if $\leg{\hat p}{q}=1$ (any quadratic over a field of characteristic not 2 has a root if and only if its discriminant is a square). Putting these results together, we deduce that $\res(\Frob_q)\mapsto \leg{\hat p}{q}.$
+
+For the other map to $\{\pm 1\}$, we see $\Frob_q\mapsto q\mapsto \leg{q}{p}.$
+
+Thus commutativity gives
+\[
+\leg{q}{p}=\leg{(-1)^{\frac{p-1}{2}} p}{q} = \leg{-1}{q}^{\frac{p-1}{2}} \leg{p}{q} = \left((-1)^{\frac{q-1}{2}}\right)^{\frac{p-1}{2}} \leg{p}{q}=(-1)^{\frac{p-1}{2}\frac{q-1}{2}}\leg{p}{q}.
+\]
+
+For the last claim, we will track $\Frob_2$, which again is defined by $\zeta_p\mapsto \zeta_p^2.$ Like before, $2$ is either split or inert in $\Q(\sqrt{\hat p}).$ From Theorem 3.41 in \cite{milneANT}, we know that since $\calO_{\Q(\sqrt{\hat p})} = \Z[\alpha]$ where $\alpha = \frac{1+\sqrt{\hat p}}{2}$ with minimal polynomial $f(x)=x^2-x+\frac{1-\hat p}{4}$, then $2$ splits if and only if $f(x)$ is irreducible modulo $2.$ If $\hat p\equiv 1 \mod 8$, i.e., $\frac{1-\hat p}{4}$ is even, 
+\[
+f(x)\equiv x(x+1) \mod 2
+\]
+so $2$ splits.
+If instead $\hat p \equiv 5\mod 8$, i.e., $\frac{1-\hat p}{4}$ is odd, \[
+f(x)\equiv x^2+x+1 \mod 2
+\]
+which is irreducible, so $2$ is inert.
+
+We also notice that $\hat p \equiv 1 \mod 8$ if and only if $p \equiv \pm 1 \mod 8$, so by the same commutativity argument as before, we get that
+\[
+\leg{2}{p} =1 \iff p \equiv \pm 1 \mod 8
+\]
+which is the desired result.
+\end{proof}
+
+
+\printbibliography
+\end{document}
