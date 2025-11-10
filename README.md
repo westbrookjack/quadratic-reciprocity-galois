@@ -40,14 +40,17 @@ Key ingredients:
    $\big(\frac{q}{p}\big)=\big(\frac{\hat p}{q}\big)=(-1)^{\frac{p-1}{2}\frac{q-1}{2}}\big(\frac{p}{q}\big)$.
 
 The supplementary laws follow by computing Frobenius at $2$:
+
 $$
 \left(\frac{2}{p}\right)=
-
-1,& p\equiv\pm1\mod 8
-
+\begin{array}{ll}
+1,& p\equiv\pm1\pmod8,\\[4pt]
+-1,& p\equiv\pm3\pmod8,
+\end{array}
 \qquad
 \left(\frac{-1}{p}\right)=(-1)^{\frac{p-1}{2}}.
 $$
+
 
 
 ---
