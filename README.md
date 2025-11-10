@@ -44,7 +44,7 @@ The supplementary laws follow by computing Frobenius at $2$:
 $$
 \left(\frac{2}{p}\right)=
 \begin{array}{ll}
-1,& p\equiv\pm1\pmod8,\\[4pt]
+1,& p\equiv\pm1\pmod8,\\
 -1,& p\equiv\pm3\pmod8,
 \end{array}
 \qquad
