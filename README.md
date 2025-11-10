@@ -47,7 +47,7 @@ $$
 -1,& p\equiv\pm3\pmod8,
 \end{cases}
 \qquad
-\left(\frac{-1}{p}\right)=(-1)^{\frac{p-1}{2}}.
+\left(\frac{-1}{p}\right)=\left((-1)^{\frac{p-1}{2}}\right).
 $$
 
 ---
