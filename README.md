@@ -42,13 +42,14 @@ Key ingredients:
 The supplementary laws follow by computing Frobenius at $2$:
 $$
 \left(\frac{2}{p}\right)=
-\begin{cases}
-1,& p\equiv\pm1\pmod8,\\
+\begin{array}{ll}
+1,& p\equiv\pm1\pmod8,\\[4pt]
 -1,& p\equiv\pm3\pmod8,
-\end{cases}
+\end{array}
 \qquad
-\left(\frac{-1}{p}\right)=\left((-1)^{\frac{p-1}{2}}\right).
+\left(\frac{-1}{p}\right)=(-1)^{\frac{p-1}{2}}.
 $$
+
 
 ---
 
